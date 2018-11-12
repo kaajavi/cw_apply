@@ -9,15 +9,19 @@ I make a Dockerfile for run app, but, we don't use this for production!!!
  0. Install [docker](https://docs.docker.com/install/) 
  and [docker-compose](https://docs.docker.com/compose/install/)
  1. Clone this repo
+ 1. Config in config/settings.py the domain in ALLOWED_HOSTS variable:
+    ```python
+    ALLOWED_HOSTS = ['my.domain.com'] #OR ['*'] for all...
+    ```  
  1. Build Dockerfile:
      ```bash
     $docker build -t app .
     ```  
- 1. Create and run docker container
+ 1. Create and run docker container:
     ```bash
     $docker run -d --name=cw_apply -p 5858:80 app
     ```
- 1. Create superuser  
+ 1. Create superuser:  
     ```bash
     $docker exec -ti cw_apply /bin/sh
     app/ # ./manage.py createsuperuser //--> and follow steps
