@@ -1,9 +1,69 @@
-{% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+{% extends 'base.html' %}
+{% block content %}
+    {% if latest_question_list %}
+
+
+        <div class="container-fluid">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner row  mx-auto">
+
+                    {% for question in latest_question_list %}
+
+                        <div class="carousel-item col-md-12 {% if forloop.first %} active {% endif %}">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title"> {{ question.question_text }}</h4>
+                                    <p class="card-text">
+
+                                    <form action="{% url 'polls:vote' question.id %}" method="post">
+                                        {% csrf_token %}
+                                        {% for choice in question.choices.all %}
+                                            <div class="form-check">
+                                                <input required class="form-check-input" type="radio" name="choice"
+                                                       id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                                                <label class="form-check-label" for="choice{{ forloop.counter }}">
+                                                    {{ choice.choice_text }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+
+
+
+                                    <hr>
+                                    <input type="submit" class="btn btn-primary mb-2" value="Vote">
+                                    <p class="small"><a href="{% url 'polls:results' question.id %}"><i class="far fa-eye"></i>See
+                                        results</a></p>
+                                    </p>
+                                    </form>
+
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <small>Date {{ question.pub_date }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center mt-4">
+                            <a class="btn btn-outline-secondary mx-1 prev" href="javascript:void(0)" title="Previous">
+                                <i class="fa fa-lg fa-chevron-left"></i>
+                            </a>
+                            <a class="btn btn-outline-secondary mx-1 next" href="javascript:void(0)" title="Next">
+                                <i class="fa fa-lg fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+
+{% endblock %}

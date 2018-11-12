@@ -1,9 +1,26 @@
-<h1>{{ question.question_text }}</h1>
+{% extends 'base.html' %}
+{% block content %}
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">{{ question.question_text }}</h4>
+            <p class="card-text">
 
-<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+            <ul class="list-group">
+                {% for choice in question.choices.all %}
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center
+                                {% if choice.is_win %} list-group-item-success {% endif %}">
+                        {{ choice.choice_text }}
+                        <span class="badge badge-primary badge-pill">{{ choice.votes }} vote{{ choice.votes|pluralize }}</span>
+                    </li>
+
+                {% endfor %}
+            </ul>
+            </p>
+
+            Vote again? <a href="{% url 'polls:index' %}">Go back!</a>
+        </div>
+    </div>
+
+{% endblock %}
